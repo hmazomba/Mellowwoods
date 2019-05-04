@@ -23,7 +23,7 @@ namespace FSM{
             B = Input.GetButton("B");
             A = Input.GetButton("A");
             Y = Input.GetButton("Y");
-            Z = Input.GetButton("Z");
+            X = Input.GetButton("X");
             inventory = Input.GetButton("Inventory");
             leftArrow = Input.GetButton("Left Arrow");
             rightArrow = Input.GetButton("Right Arrow");
