@@ -34,7 +34,7 @@ namespace FSM{
             s.moveAmount = Mathf.Clamp01(Mathf.Abs(s.horizontal) + Mathf.Abs(s.vertical));
 
             retVal = IsAttacking();
-            retVal retVal;
+            return retVal;
 
         }
         bool IsAttacking()
