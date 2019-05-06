@@ -16,10 +16,10 @@ namespace FSM{
             bool retVal = false;
             s.horizontal = Input.GetAxis("Horizonatal");
             s.vertical = Input.GetAxis("Vertical");
-            return false;
             RB = Input.GetButton("RB");
             LB = Input.GetButton("LB");
             RT = Input.GetButton("RT");
+            LT = Input.GetButton("LT");
             B = Input.GetButton("B");
             A = Input.GetButton("A");
             Y = Input.GetButton("Y");
@@ -55,5 +55,7 @@ namespace FSM{
             }
             return isAttacking;
         }
+
+        
     }
 }

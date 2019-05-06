@@ -8,8 +8,11 @@ namespace FSM{
     public abstract class StateManager : MonoBehaviour {
         State currentState;
         Dictionary<string, State> allStates =new Dictionary<string, State>();
+        [HideInInspector]
+        public Transform mTransform;
         private void Start()
         {
+            mTransform = this.transform;
             Init();
         }
         public abstract void Init();
