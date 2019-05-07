@@ -14,6 +14,7 @@ namespace FSM{
         public override bool Execute()
         {
             bool retVal = false;
+            isAttacking = false;
             s.horizontal = Input.GetAxis("Horizontal");
             s.vertical = Input.GetAxis("Vertical");
             RB = Input.GetButton("RB");
@@ -41,16 +42,16 @@ namespace FSM{
         {
             if(RB || LB || RT || LT)
             {   
-                //isAttacking = true;
+                isAttacking = true;
             }
             if(Y)
             {
-                //isAttacking = false;
+                isAttacking = false;
             }
             if(isAttacking)
             {   
-                //s.PlayTargetAnimation("Eva_Attack1");
-                //s.ChangeState(s.combatID);
+                s.PlayTargetAnimation("Attack 1", true);
+                s.ChangeState(s.combatID);
 
             }
             return isAttacking;

@@ -11,6 +11,9 @@ namespace FSM
         List<StateAction> updateActions = new List<StateAction>();
         List<StateAction> lateUpdateActions = new List<StateAction>();
 
+        public delegate void OnEnter();
+        public OnEnter onEnter;
+
         public State(List<StateAction> fixedUpdateActions, List<StateAction> updateActions, List<StateAction> lateUpdateActions)
         {
             this.fixedUpdateActions = fixedUpdateActions;

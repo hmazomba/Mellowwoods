@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace FSM{
-    public class MovePlayerCharacter: StateAction{
+    //This action moves and animates the character. The movement is based on the look direction of a camera.
+    public class CharacterMovement: StateAction{
         PlayerStateManager states;      
 
-        public MovePlayerCharacter(PlayerStateManager playerStateManager)
+        public CharacterMovement(PlayerStateManager playerStateManager)
         {
             states = playerStateManager;
         }
 
          public override bool Execute()
         {
-            float frontY=0;
+            float frontY = 0;
             RaycastHit hit;
             Vector3 origin = states.mTransform.position  + (states.mTransform.forward * states.frontRayOffset);
             origin.y += .5f;

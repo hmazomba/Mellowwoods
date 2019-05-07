@@ -48,6 +48,7 @@ namespace FSM{
             //run on enter action of current state
 
             currentState = targetState;
+            currentState.onEnter?.Invoke(); //shorthand
         }
         State GetState(string targetID)
         {

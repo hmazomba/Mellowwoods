@@ -12,9 +12,10 @@ namespace FSM
         public float mouseY;
         public float moveAmount;
         public Vector3 rotateDirection;
+        
 
         [Header("States")]
-        public bool isGrounded;
+        
         public bool isLockingOn;
 
         [Header("Movement Stats")]
@@ -39,7 +40,7 @@ namespace FSM
                 new List<StateAction>(){
                     //fixed update
                     
-                    new MovePlayerCharacter(this),
+                    new CharacterMovement(this),
 
                 },
                 new List<StateAction>(){
@@ -51,6 +52,8 @@ namespace FSM
 
                 }
             );
+
+            locomotion.onEnter = DisableRootMotion;
             State combat = new State(
                 new List<StateAction>(){
                     //fixed update
@@ -58,6 +61,7 @@ namespace FSM
                 },
                 new List<StateAction>(){
                     //update
+                    new MonitorInteraction(this, "IsInteracting", locomotionID),
 
                 },
                 new List<StateAction>(){
@@ -65,6 +69,7 @@ namespace FSM
 
                 }
             );
+            combat.onEnter = EnableRootMotion;
 
             RegisterState(locomotionID, locomotion);
             RegisterState(combatID, combat);
@@ -89,5 +94,16 @@ namespace FSM
             
             base.LateTick();
         }
+
+        #region State Events
+        void DisableRootMotion()
+        {
+            useRootMotion = false;
+        }
+        void EnableRootMotion()
+        {
+            useRootMotion = true;
+        }
+        #endregion
     }
 }
