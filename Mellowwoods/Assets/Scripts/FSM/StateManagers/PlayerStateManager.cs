@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace FSM
 
         [Header("States")]
         public bool isGrounded;
+        public bool isLockingOn;
 
         [Header("Movement Stats")]
         public float frontRayOffset = .5f;
@@ -36,13 +38,13 @@ namespace FSM
             State locomotion = new State(
                 new List<StateAction>(){
                     //fixed update
-                    new InputManager(this),
+                    
                     new MovePlayerCharacter(this),
 
                 },
                 new List<StateAction>(){
                     //update
-
+                    new InputManager(this),
                 },
                 new List<StateAction>(){
                     //late update
@@ -84,6 +86,7 @@ namespace FSM
 
         private void LateUpdate()
         {
+            
             base.LateTick();
         }
     }

@@ -14,7 +14,7 @@ namespace FSM{
         public override bool Execute()
         {
             bool retVal = false;
-            s.horizontal = Input.GetAxis("Horizonatal");
+            s.horizontal = Input.GetAxis("Horizontal");
             s.vertical = Input.GetAxis("Vertical");
             RB = Input.GetButton("RB");
             LB = Input.GetButton("LB");
@@ -28,7 +28,7 @@ namespace FSM{
             leftArrow = Input.GetButton("Left Arrow");
             rightArrow = Input.GetButton("Right Arrow");
             downArrow = Input.GetButton("Down Arrow");
-            upArrow = Input.GetButton("UpArrow");
+            upArrow = Input.GetButton("Up Arrow");
             s.mouseX = Input.GetAxis("Mouse X");
             s.mouseY = Input.GetAxis("Mouse Y");
             s.moveAmount = Mathf.Clamp01(Mathf.Abs(s.horizontal) + Mathf.Abs(s.vertical));
@@ -41,11 +41,11 @@ namespace FSM{
         {
             if(RB || LB || RT || LT)
             {   
-                isAttacking = true;
+                //isAttacking = true;
             }
             if(Y)
             {
-                isAttacking = false;
+                //isAttacking = false;
             }
             if(isAttacking)
             {   

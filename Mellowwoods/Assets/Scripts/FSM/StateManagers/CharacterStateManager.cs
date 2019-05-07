@@ -18,6 +18,7 @@ namespace FSM
         public override void Init(){
             anim = GetComponentInChildren<Animator>();
             rigidbody = GetComponentInChildren<Rigidbody>();
+            anim.applyRootMotion = false;
         }
 
         public void PlayTargetAnimation(string targetAnim)

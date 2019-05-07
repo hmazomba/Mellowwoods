@@ -33,6 +33,7 @@ namespace FSM{
             if(states.isGrounded)
             {
                 float moveAmount = states.moveAmount;
+
                 if(moveAmount > 0.1f)
                 {
                     states.rigidbody.isKinematic = false;
@@ -62,29 +63,49 @@ namespace FSM{
                 states.rigidbody.drag = 0;
                 targetVelocity.y = currentVelocity.y;
             }
+            HandleAnimations();
             
             Debug.DrawRay((states.mTransform.position + Vector3.up * .2f), targetVelocity, Color.green, 0.01f, false);
-            states.rigidbody.velocity = Vector3.Lerp(currentVelocity, targetVelocity, states.delta * states.adaptSpeed);
+            states.rigidbody.velocity = targetVelocity;
+            
             return false;
         }
         void HandleCamRotation()
         {
-            float hori  = s.horizontal;
-            float vert = s.vertical;
+            float hori  = states.horizontal;
+            float vert = states.vertical;
 
-            Vector3 targetDir = s.camera.transform.forward *vert;
-            targetDir += s.camera.transform.right * h;
-            targaetDir.Normalize();
+            Vector3 targetDir = states.camera.transform.forward *vert;
+            targetDir += states.camera.transform.right * hori;
+            targetDir.Normalize();
 
             targetDir.y = 0;
             if(targetDir == Vector3.zero)
-                targetDir = s.mTransform.forward;
+                targetDir = states.mTransform.forward;
 
-                Quaternion tr = Quaternion.LookRotation(targetDir);
-                Quaternion targetRotation = Quaternion.Slerp(
-                    s.mTransform.rotation, tr, s.delta * s.moveAmount * s.rotateSpeed
+            Quaternion tr = Quaternion.LookRotation(targetDir);
+            Quaternion targetRotation = Quaternion.Slerp(
+                    states.mTransform.rotation, tr, states.delta * states.moveAmount * states.adaptSpeed
                 );
-                s.mTransform.rotation = targetRotation;
+                states.mTransform.rotation = targetRotation;
+        }
+        void HandleAnimations()
+        {
+            if(states.isGrounded){
+                float moveValue = states.moveAmount;
+                float forwardValue = 0;
+                if(moveValue> 0&& moveValue < .5f)
+                {
+                    forwardValue = .5f;
+                }
+                else if(moveValue > 0.5f){
+                    forwardValue = 1;
+                }
+                states.anim.SetFloat("Forward", forwardValue, .2f, states.delta);
+            }
+            else{
+
+            }
         }
     }  
 }
