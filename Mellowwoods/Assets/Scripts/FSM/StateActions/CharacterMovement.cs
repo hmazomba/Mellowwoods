@@ -1,3 +1,4 @@
+using System.Numerics;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,7 +17,16 @@ namespace FSM{
         {
             float frontY = 0;
             RaycastHit hit;
-            Vector3 origin = states.mTransform.position  + (states.mTransform.forward * states.frontRayOffset);
+            Vector3 forwardDirection = states.mTransform.forward;
+
+            if(states.lockOn)
+            {
+                targetVelocity = states.mTransform.forward * states.vertical * states.movementSpeed;
+                targetVelocity += states.mTransform.right * states.horizontal* states.movementSpeed;
+            }else{
+                targetVelocity = states.mTransform.forward * states.moveAmount * states.movementSpeed;
+            }  
+            Vector3 origin = states.mTransform.position  + (targetVelocity.normalized * states.frontRayOffset);
             origin.y += .5f;
             Debug.DrawRay(origin, -Vector3.up, Color.red, .01f, false);
             if(Physics.Raycast(origin, -Vector3.up, out hit, 1, states.ignoreForGroundCheck)){
@@ -24,12 +34,8 @@ namespace FSM{
                 frontY = y - states.mTransform.position.y;
             }
             Vector3 currentVelocity = states.rigidbody.velocity;
-            Vector3 targetVelocity = states.mTransform.forward * states.moveAmount * states.movementSpeed;
-
-            if(states.isLockingOn)
-            {
-                targetVelocity = states.rotateDirection * states.moveAmount * states.movementSpeed;
-            }
+            Vector3 targetVelocity = Vector3.zero;
+                
 
             if(states.isGrounded)
             {
@@ -73,40 +79,77 @@ namespace FSM{
         }
         void HandleCamRotation()
         {
-            float hori  = states.horizontal;
+            Vector3 targetDir = Vector3.Zero;
+            float moveOverride = states.moveAmount;
+            if(states.lockOn)
+            {
+                targetDir =states.target.postion - states.mTransform.position;
+                targetDir.Normalize();
+                targetDir.y=0;
+                moveOverride=1;
+            }
+            else
+            {
+                float hori  = states.horizontal;
             float vert = states.vertical;
-
-            Vector3 targetDir = states.camera.transform.forward *vert;
-            targetDir += states.camera.transform.right * hori;
+                targetDir = states.camera.transform.forward *vert;
+                targetDir += states.camera.transform.right * hori;
+                
+            }
+            
             targetDir.Normalize();
-
             targetDir.y = 0;
             if(targetDir == Vector3.zero)
                 targetDir = states.mTransform.forward;
 
             Quaternion tr = Quaternion.LookRotation(targetDir);
             Quaternion targetRotation = Quaternion.Slerp(
-                    states.mTransform.rotation, tr, states.delta * states.moveAmount * states.adaptSpeed
+                    states.mTransform.rotation, tr, states.delta *moveOverride* states.adaptSpeed
                 );
                 states.mTransform.rotation = targetRotation;
         }
         void HandleAnimations()
         {
             if(states.isGrounded){
-                float moveValue = states.moveAmount;
-                float forwardValue = 0;
-                if(moveValue> 0&& moveValue < .5f)
-                {
-                    forwardValue = .5f;
-                }
-                else if(moveValue > 0.5f){
-                    forwardValue = 1;
-                }
-                states.anim.SetFloat("Forward", forwardValue, .2f, states.delta);
-            }
-            else{
 
+                if(states.lockOn0){
+                    float verticalValue = Mathf.Abs(states.vertical);
+                    float forward = 0;
+                    if(verticalValue> 0&& verticalValue < .5f)
+                        forward = .5f;                    
+                    else if(verticalValue > 0.5f)
+                        forward = 1;
+                    
+                    states.anim.SetFloat("Forward", forward, .2f, states.delta);
+
+                    float horizontalValue = Mathf.Abs(states.horizontal);
+                    float sideways = 0;
+                    if(horizontalValue> 0&& horizontalValue < .5f)
+                        sideways = .5f;                    
+                    else if(horizontalValue > 0.5f)
+                        sideways = 1;
+
+                    if(states.horizontal < 0)
+                        sideways = -1;    
+                    
+                    states.anim.SetFloat("Sideways", sideways, .2f, states.delta);
+                }
+                
+                }else{
+                    float moveValue = states.moveAmount;
+                    float forwardValue = 0;
+                    if(moveValue> 0&& moveValue < .5f)
+                    {
+                        forwardValue = .5f;
+                    }
+                    else if(moveValue > 0.5f){
+                        forwardValue = 1;
+                    }
+                    states.anim.SetFloat("Forward", forwardValue, .2f, states.delta);
+                    states.anim.SetFloat("Sideways", sideways, 0.2f, states.delta);
+                }
+                
             }
         }
     }  
-}
+

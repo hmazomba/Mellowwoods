@@ -1,3 +1,4 @@
+using System.Runtime.Intrinsics.Arm.Arm64;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,6 +26,8 @@ namespace FSM
 
         [Header("Camera")]
         public new Transform camera;
+        public Cinemachine.FreeLook normalCamera;
+        public Cinemachine.FreeLook lockOnCamera;
 
         [HideInInspector]
         public LayerMask ignoreForGroundCheck;
@@ -103,6 +106,23 @@ namespace FSM
         void EnableRootMotion()
         {
             useRootMotion = true;
+        }
+        #endregion
+
+        #region Lockon
+        public override OnAssignLookOverride(Transform target)
+        {
+            base.OnAssignLookOverride(target);
+            normalCamera.gameobject.SetActive(false);
+            lockOnCamera.gameobject.SetActive(true);
+            lockOnCamera.m_LookAt = target;
+        }
+
+        public override OnClearLookOverride(Transform target)
+        {
+            Base.OnClearLookOverride();
+            normalCamera.gameobject.SetActive(true);
+            lockOnCamera.gameobject.SetActive(false);
         }
         #endregion
     }

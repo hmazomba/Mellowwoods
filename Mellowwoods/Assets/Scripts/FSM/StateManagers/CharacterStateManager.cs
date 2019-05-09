@@ -15,6 +15,7 @@ namespace FSM
         public float vertical;
         public float horizontal;
         public bool lockOn;
+        public Transform target;
         public float delta;
         public Vector3 rootMovement;
 
@@ -32,6 +33,17 @@ namespace FSM
         {
             anim.SetBool("IsInteracting", isInteracting);
             anim.CrossFade(targetAnim, 0.2f);
+        }
+        public virtual void OnAssignLookOverride(Transform target)
+        {
+            target = target;
+            if(target!= null)
+                lockOn = true;
+        }
+
+        public virtual void OnClearLookOverride()
+        {
+            lockOn = false;
         }
     }
 }
