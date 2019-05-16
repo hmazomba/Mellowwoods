@@ -10,6 +10,7 @@ namespace FSM
         public Animator anim;
         public new Rigidbody rigidbody;
         public AnimatorHook animatorHook;
+        public ClothManager clothManager;
 
         [Header("Controller Values")]
         public float vertical;
@@ -27,6 +28,8 @@ namespace FSM
             rigidbody = GetComponentInChildren<Rigidbody>();
             animatorHook = GetComponentInChildren<AnimatorHook>();
             animatorHook.Init(this);
+            clothManager = GetComponentInChildren<ClothManager>();
+            anim.applyRootMotion = false;
         }
 
         public void PlayTargetAnimation(string targetAnim, bool isInteracting)

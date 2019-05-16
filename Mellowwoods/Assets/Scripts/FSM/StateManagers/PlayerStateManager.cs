@@ -36,6 +36,9 @@ namespace FSM
         public string locomotionID = "Locomotion";
         [HideInInspector]
         public string combatID = "Combat";
+
+
+        public List<ClothItem> startingClothes;
         public override void Init(){
             base.Init();
             State locomotion = new State(
@@ -77,6 +80,10 @@ namespace FSM
             RegisterState(combatID, combat);
             ChangeState(locomotionID);
             ignoreForGroundCheck = ~(1<<9|1<<10);
+
+            clothManager.Init();
+
+            LoadListofItems(startingClothes);
         }
 
         private void FixedUpdate()
@@ -124,5 +131,10 @@ namespace FSM
             lockOnCamera.gameObject.SetActive(false);
         }
         #endregion
+        void LoadListofItems(List<ClothItem> targetClothes)
+        {
+            clothManager.LoadListOfItems(targetClothes);
+        }
+        
     }
 }
