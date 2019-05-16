@@ -1,4 +1,4 @@
-using System.Numerics;
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,6 +18,8 @@ namespace FSM{
             float frontY = 0;
             RaycastHit hit;
             Vector3 forwardDirection = states.mTransform.forward;
+            Vector3 currentVelocity = states.rigidbody.velocity;
+            Vector3 targetVelocity = Vector3.zero;
 
             if(states.lockOn)
             {
@@ -33,8 +35,7 @@ namespace FSM{
                 float y = hit.point.y;
                 frontY = y - states.mTransform.position.y;
             }
-            Vector3 currentVelocity = states.rigidbody.velocity;
-            Vector3 targetVelocity = Vector3.zero;
+            
                 
 
             if(states.isGrounded)
@@ -79,11 +80,11 @@ namespace FSM{
         }
         void HandleCamRotation()
         {
-            Vector3 targetDir = Vector3.Zero;
+            Vector3 targetDir = Vector3.zero;
             float moveOverride = states.moveAmount;
             if(states.lockOn)
             {
-                targetDir =states.target.postion - states.mTransform.position;
+                targetDir = states.target.position - states.mTransform.position;
                 targetDir.Normalize();
                 targetDir.y=0;
                 moveOverride=1;
@@ -91,7 +92,7 @@ namespace FSM{
             else
             {
                 float hori  = states.horizontal;
-            float vert = states.vertical;
+                float vert = states.vertical;
                 targetDir = states.camera.transform.forward *vert;
                 targetDir += states.camera.transform.right * hori;
                 
@@ -110,11 +111,14 @@ namespace FSM{
         }
         void HandleAnimations()
         {
+            float verticalValue = Mathf.Abs(states.vertical);
+            float forward = 0;
+            float horizontalValue = Mathf.Abs(states.horizontal);
+            float sideways = 0;
             if(states.isGrounded){
 
-                if(states.lockOn0){
-                    float verticalValue = Mathf.Abs(states.vertical);
-                    float forward = 0;
+                if(states.lockOn){
+                    
                     if(verticalValue> 0&& verticalValue < .5f)
                         forward = .5f;                    
                     else if(verticalValue > 0.5f)
@@ -122,8 +126,7 @@ namespace FSM{
                     
                     states.anim.SetFloat("Forward", forward, .2f, states.delta);
 
-                    float horizontalValue = Mathf.Abs(states.horizontal);
-                    float sideways = 0;
+                    
                     if(horizontalValue> 0&& horizontalValue < .5f)
                         sideways = .5f;                    
                     else if(horizontalValue > 0.5f)

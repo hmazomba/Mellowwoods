@@ -1,5 +1,4 @@
-using System.Runtime.Intrinsics.Arm.Arm64;
-using System;
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,8 +25,8 @@ namespace FSM
 
         [Header("Camera")]
         public new Transform camera;
-        public Cinemachine.FreeLook normalCamera;
-        public Cinemachine.FreeLook lockOnCamera;
+        public Cinemachine.CinemachineFreeLook normalCamera;
+        public Cinemachine.CinemachineFreeLook lockOnCamera;
 
         [HideInInspector]
         public LayerMask ignoreForGroundCheck;
@@ -110,19 +109,19 @@ namespace FSM
         #endregion
 
         #region Lockon
-        public override OnAssignLookOverride(Transform target)
+        public override void OnAssignLookOverride(Transform target)
         {
             base.OnAssignLookOverride(target);
-            normalCamera.gameobject.SetActive(false);
-            lockOnCamera.gameobject.SetActive(true);
+            normalCamera.gameObject.SetActive(false);
+            lockOnCamera.gameObject.SetActive(true);
             lockOnCamera.m_LookAt = target;
         }
 
-        public override OnClearLookOverride(Transform target)
+        public override void OnClearLookOverride(Transform target)
         {
-            Base.OnClearLookOverride();
-            normalCamera.gameobject.SetActive(true);
-            lockOnCamera.gameobject.SetActive(false);
+            base.OnClearLookOverride(target);
+            normalCamera.gameObject.SetActive(true);
+            lockOnCamera.gameObject.SetActive(false);
         }
         #endregion
     }

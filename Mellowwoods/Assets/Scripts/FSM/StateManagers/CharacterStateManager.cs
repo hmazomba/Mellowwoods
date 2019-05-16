@@ -41,7 +41,7 @@ namespace FSM
                 lockOn = true;
         }
 
-        public virtual void OnClearLookOverride()
+        public virtual void OnClearLookOverride(Transform target)
         {
             lockOn = false;
         }
